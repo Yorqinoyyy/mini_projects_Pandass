@@ -1,0 +1,21 @@
+import pandas as pd
+
+# Load dataset
+url = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/exam.csv"
+df = pd.read_csv(url)
+
+# Total score
+df['total_score'] = df['math'] + df['reading'] + df['writing']
+
+# Top 5 students
+top_students = df.sort_values(by='total_score', ascending=False).head(5)
+
+# Average scores per subject
+avg_subject = df[['math', 'reading', 'writing']].mean()
+
+# Average scores by gender
+avg_by_gender = df.groupby('gender')[['math', 'reading', 'writing']].mean()
+
+print("Top 5 Students:\n", top_students[['gender', 'total_score']])
+print("\nAverage Scores Per Subject:\n", avg_subject)
+print("\nAverage Scores by Gender:\n", avg_by_gender)
