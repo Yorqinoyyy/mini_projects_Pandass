@@ -1,0 +1,21 @@
+import pandas as pd
+
+# Load dataset
+url = "https://raw.githubusercontent.com/alishermutalov/praktikum-datasets/refs/heads/praktikum/restaurant_sales.csv"
+df = pd.read_csv(url)
+
+# Remove unnecessary column
+df.drop(columns=['Unnamed: 0'], inplace=True)
+
+# Total revenue
+df['total'] = df['quantity'] * df['price']
+
+# Top 5 selling products
+top_products = df.groupby('product')['quantity'].sum().sort_values(ascending=False).head(5)
+
+# Monthly revenue trend
+df['date'] = pd.to_datetime(df['date'])
+monthly_revenue = df.groupby(df['date'].dt.to_period('M'))['total'].sum()
+
+print("Top 5 Selling Products:\n", top_products)
+print("\nMonthly Revenue Trend:\n", monthly_revenue)
