@@ -1,0 +1,22 @@
+import pandas as pd
+import numpy as np
+
+# Load dataset
+df = pd.read_csv("https://github.com/anvarnarz/praktikum_datasets/raw/main/automobile_data_nan.csv", index_col=0)
+
+# Handle missing values
+df.fillna(method='ffill', inplace=True)
+
+# Convert numeric columns stored as strings
+numeric_cols = ['price', 'horsepower']
+for col in numeric_cols:
+    df[col] = pd.to_numeric(df[col], errors='coerce')
+
+# Top 5 most expensive cars
+top_expensive = df[['company', 'price']].sort_values(by='price', ascending=False).head(5)
+
+# Average price per manufacturer
+avg_price = df.groupby('company')['price'].mean().sort_values(ascending=False)
+
+print("Top 5 Most Expensive Cars:\n", top_expensive)
+print("\nAverage Price by Manufacturer:\n", avg_price)
